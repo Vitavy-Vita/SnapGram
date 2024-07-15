@@ -2,13 +2,13 @@ import { Client, Account, Databases, Storage, Avatars } from "appwrite";
 
 export const appwriteConfig = {
   projectId: import.meta.env.VITE_APPWRITE_PROJECT_ID,
-  url: import.meta.env.VITE_APPWRITE_URL
+  url: import.meta.env.VITE_APPWRITE_URL,
 };
 
 export const client = new Client();
 
-client.setProject(appwriteConfig.projectId);
-client.setEndpoint(appwriteConfig.url);
+client.setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);
+client.setEndpoint(import.meta.env.VITE_APPWRITE_URL);
 
 export const account = new Account(client);
 export const databases = new Databases(client);
