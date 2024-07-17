@@ -8,7 +8,7 @@ export async function createUserAccount(user: InterfaceNewUser) {
       ID.unique(),
       user.email,
       user.password,
-      user.name,
+      user.name
     );
     if (!newAccount) throw Error;
 
@@ -58,24 +58,30 @@ export async function signInAccount(user: { email: string; password: string }) {
     return session;
   } catch (error) {
     console.log(error);
-  
   }
 }
 export async function getCurrentUser() {
   try {
-    const currentAccount = await account.get()
-    if(!currentAccount) throw Error
+    const currentAccount = await account.get();
+    if (!currentAccount) throw Error;
 
     const currentUser = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.userCollectionId,
-      [Query.equal('accountId', currentAccount.$id)]
-    )
-    if(!currentUser) throw Error
+      [Query.equal("accountId", currentAccount.$id)]
+    );
+    if (!currentUser) throw Error;
 
-    return currentUser.documents[0]
+    return currentUser.documents[0];
   } catch (error) {
     console.log();
-    
+  }
+}
+export async function signOutAccount() {
+  try {
+    const session = await account.deleteSession("current");
+    return session;
+  } catch (error) {
+    console.log(error);
   }
 }
