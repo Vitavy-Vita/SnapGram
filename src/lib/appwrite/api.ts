@@ -8,7 +8,7 @@ export async function createUserAccount(user: InterfaceNewUser) {
       ID.unique(),
       user.email,
       user.password,
-      user.name
+      user.name,
     );
     if (!newAccount) throw Error;
 

@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { SignUpValidation } from "@/lib/validation";
 import Loader from "@/components/shared/Loader";
 import { Link, useNavigate } from "react-router-dom";
-import { createUserAccount, getCurrentUser } from "@/lib/appwrite/api";
+
 import { useToast } from "@/components/ui/use-toast";
 import {
   useCreateUserAccount,
@@ -27,12 +27,14 @@ const SignUpForm = () => {
   const { toast } = useToast();
   const { checkAuthUser, isLoading: userLoading } = useUserContext();
   const navigate = useNavigate();
+
+
   const { mutateAsync: createUserAccount, isPending: isCreatingAccount } =
     useCreateUserAccount();
-
   const { mutateAsync: signInAccount, isPending: isSigningIn } =
     useSignInAccount();
 
+    
   const form = useForm<z.infer<typeof SignUpValidation>>({
     resolver: zodResolver(SignUpValidation),
     defaultValues: {
