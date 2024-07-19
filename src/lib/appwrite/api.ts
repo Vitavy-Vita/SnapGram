@@ -91,7 +91,7 @@ export async function createPost(post: InterfaceNewPost) {
     const uploadedFile = await uploadFile(post.file[0]);
 
     if (!uploadedFile) throw Error;
-    const fileUrl = getFilePreview(uploadedFile.$id)
+    const fileUrl = getFilePreview(uploadedFile.$id);
 
     if (!fileUrl) {
       deleteFile(uploadedFile.$id);
@@ -99,10 +99,9 @@ export async function createPost(post: InterfaceNewPost) {
     }
     // convert tags in array
     const tags = post.tags?.replace(/ /g, "").split(",") || [];
-    
+
     console.log(fileUrl);
     const newPost = await databases.createDocument(
-     
       appwriteConfig.databaseId,
       appwriteConfig.postCollectionId,
       ID.unique(),
@@ -160,4 +159,14 @@ export async function deleteFile(fileId: string) {
   } catch (error) {
     console.log(error);
   }
+}
+
+export async function getRecentPosts() {
+  const posts = await databases.listDocuments(
+    appwriteConfig.databaseId,
+    appwriteConfig.postCollectionId,
+    [Query.orderDesc("$createdAt"), Query.limit(20)]
+  );
+  if (!posts) throw Error;
+  return posts;
 }
