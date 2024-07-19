@@ -22,3 +22,9 @@ export const SignInValidation = z.object({
     .min(8, { message: "Must contain at least 8 characters" })
     .max(50),
 });
+export const PostValidation = z.object({
+  caption: z.string().min(5).max(2200),
+  file: z.custom<File[]>(),
+  location: z.string().min(2).max(200),
+  tags: z.string(),
+});
