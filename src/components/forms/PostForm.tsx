@@ -19,14 +19,24 @@ import { useUserContext } from "@/context/AuthContext";
 
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../ui/use-toast";
-import { useCreatePost } from "@/lib/react-query/queriesAndMutations";
+import {
+  useCreatePost,
+  useDeletePost,
+  useUpdatePost,
+} from "@/lib/react-query/queriesAndMutations";
 
 type PostFormProps = {
   post?: Models.Document;
+  action: "Create" | "Update";
 };
-const PostForm = ({ post }: PostFormProps) => {
+const PostForm = ({ post, action }: PostFormProps) => {
   const { mutateAsync: createPost, isPending: isLoadingCreate } =
     useCreatePost();
+  const { mutateAsync: updatePost, isPending: isLoadingUpdate } =
+    useUpdatePost();
+  const { mutateAsync: deletePost, isPending: isLoadingDelete } =
+    useDeletePost();
+
   const { user } = useUserContext();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -40,7 +50,19 @@ const PostForm = ({ post }: PostFormProps) => {
     },
   });
 
-  async function onSubmitNewPost(values: z.infer<typeof PostValidation>) {
+  async function onSubmit(values: z.infer<typeof PostValidation>) {
+    if (post && action === "Update") {
+      const updatedPost = await updatePost({
+        ...values,
+        postId: post.$id,
+        imageId: post?.imageId,
+        imageUrl: post?.imageUrl,
+      });
+      if (!updatedPost) {
+        toast({ title: "please try again" });
+      }
+      navigate(`/posts/${post.$id}`);
+    }
     const newPost = await createPost({
       ...values,
       userId: user.id,
@@ -56,7 +78,7 @@ const PostForm = ({ post }: PostFormProps) => {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmitNewPost)}
+        onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-9 w-full max-w-5xl"
       >
         <FormField
@@ -131,8 +153,11 @@ const PostForm = ({ post }: PostFormProps) => {
           <Button
             type="submit"
             className="shad-button_primary whitespace-nowrap"
+            disabled={isLoadingCreate || isLoadingUpdate}
+
           >
-            Submit
+            {isLoadingCreate || isLoadingUpdate && 'Loading...'}
+            {action} Post
           </Button>
         </div>
       </form>
