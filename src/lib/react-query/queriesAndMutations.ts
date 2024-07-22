@@ -10,8 +10,10 @@ import {
   deletePost,
   deleteSavedPost,
   getCurrentUser,
+  getInfinitePosts,
   getPostById,
   getRecentPosts,
+  getSearchPosts,
   likePost,
   savePost,
   signInAccount,
@@ -159,3 +161,27 @@ export const useDeletePost = () => {
     },
   });
 };
+
+export const useGetPosts = () => {
+  // hook from React Query, which provides built-in support for infinite scrolling.
+  return useInfiniteQuery({
+    queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
+    queryFn: getInfinitePosts,
+    getNextPageParam: (lastPage) => {
+      // if we are on the 'lastPage' and the array [documents] is empty, this means there are no more pages to fetch, so return null
+      if (lastPage && lastPage.documents.length === 0) return null;
+      // Otherwise, get the ID of the last document in the documents array.
+      const lastId = lastPage.documents[lastPage?.documents.length - 1];
+      return lastId;
+    },
+  });
+};
+
+export const useSearchPosts = (searchTerms: string) => {
+return useQuery({
+  queryKey: [QUERY_KEYS.SEARCH_POSTS],
+  queryFn: ()=>getSearchPosts(searchTerms),
+  // refetch everytime searchTerms updates
+  enabled: !!searchTerms
+})
+}

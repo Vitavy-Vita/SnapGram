@@ -174,7 +174,7 @@ export async function updatePost(post: InterfaceUpdatePost) {
 export async function deletePost(postId: string, imageId: string) {
   if (!postId || !imageId) throw Error;
   try {
-     await databases.deleteDocument(
+    await databases.deleteDocument(
       appwriteConfig.databaseId,
       appwriteConfig.postCollectionId,
       postId
@@ -287,6 +287,41 @@ export async function getPostById(postId: string) {
     );
     if (!post) throw Error;
     return post;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
+  // Array of any type of elements, ordered newest posts first, limited to 10 per query
+  const queries: any[] = [Query.orderDesc("$createdAt"), Query.limit(10)];
+
+  if (pageParam) {
+    // Sets the pagination for posts, if we already have 10 posts, loads 10more indefinitely
+    // Converts pageParam to a string. This is often necessary because some APIs or databases expect cursor values to be strings.
+    queries.push(Query.cursorAfter(pageParam.toString()));
+    try {
+      const posts = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.postCollectionId,
+        queries
+      );
+      if (!posts) throw Error;
+      return posts;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
+export async function getSearchPosts(searchTerms: string) {
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      [Query.search(searchTerms, "caption")]
+    );
+    if (!posts) throw Error;
+    return posts;
   } catch (error) {
     console.log(error);
   }
