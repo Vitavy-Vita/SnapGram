@@ -166,14 +166,16 @@ export const useGetPosts = () => {
   // hook from React Query, which provides built-in support for infinite scrolling.
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
-    queryFn: getInfinitePosts,
-    getNextPageParam: (lastPage) => {
+    queryFn: getInfinitePosts as any,
+    getNextPageParam: (lastPage: any) => {
       // if we are on the 'lastPage' and the array [documents] is empty, this means there are no more pages to fetch, so return null
+      console.log("lastPage", lastPage);
       if (lastPage && lastPage.documents.length === 0) return null;
       // Otherwise, get the ID of the last document in the documents array.
-      const lastId = lastPage.documents[lastPage?.documents.length - 1];
+      const lastId = lastPage.documents[lastPage?.documents.length - 1].$id;
       return lastId;
     },
+    initialPageParam: null, // Set initialPageParam to null (tanstack v5) 
   });
 };
 
