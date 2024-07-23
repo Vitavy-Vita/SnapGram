@@ -300,17 +300,18 @@ export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
     // Sets the pagination for posts, if we already have 10 posts, loads 10more indefinitely
     // Converts pageParam to a string. This is often necessary because some APIs or databases expect cursor values to be strings.
     queries.push(Query.cursorAfter(pageParam.toString()));
-    try {
-      const posts = await databases.listDocuments(
-        appwriteConfig.databaseId,
-        appwriteConfig.postCollectionId,
-        queries
-      );
-      if (!posts) throw Error;
-      return posts;
-    } catch (error) {
-      console.log(error);
-    }
+  }
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      queries
+    );
+
+    if (!posts) throw Error;
+    return posts;
+  } catch (error) {
+    console.log(error);
   }
 }
 export async function getSearchPosts(searchTerms: string) {

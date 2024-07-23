@@ -15,6 +15,7 @@ const Explore = () => {
   const { data: searchPosts, isFetching: isSearchFetching } =
     useSearchPosts(debouncedValue);
   const { data: posts, fetchNextPage, hasNextPage } = useGetPosts();
+
   if (!posts) {
     return (
       <div className="flex-center w-full h-full">
@@ -23,7 +24,6 @@ const Explore = () => {
     );
   }
 
-  console.log(posts);
   const shouldShowSearchResults = searchValue !== "";
   const shouldShowPosts =
     !shouldShowSearchResults &&
