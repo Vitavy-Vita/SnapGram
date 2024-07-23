@@ -1,7 +1,7 @@
 import { sidebarLinks } from "@/constants";
 import { InterfaceNavLink } from "@/types";
 
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 const BottomBar = () => {
   const { pathname } = useLocation();
@@ -10,7 +10,7 @@ const BottomBar = () => {
       {sidebarLinks.map((link: InterfaceNavLink) => {
         const isActive = pathname === link.route;
         return (
-          <Link
+          <NavLink
             to={link.route}
             key={link.label}
             className={`${
@@ -25,7 +25,7 @@ const BottomBar = () => {
               className={`${isActive && "invert-white"}`}
             />
             <p className="tiny-medium text-light-2">{link.label}</p>
-          </Link>
+          </NavLink>
         );
       })}
     </section>

@@ -169,7 +169,6 @@ export const useGetPosts = () => {
     queryFn: getInfinitePosts as any,
     getNextPageParam: (lastPage: any) => {
       // if we are on the 'lastPage' and the array [documents] is empty, this means there are no more pages to fetch, so return null
-      console.log("lastPage", lastPage);
       if (lastPage && lastPage.documents.length === 0) return null;
       // Otherwise, get the ID of the last document in the documents array.
       const lastId = lastPage.documents[lastPage?.documents.length - 1].$id;
@@ -181,7 +180,7 @@ export const useGetPosts = () => {
 
 export const useSearchPosts = (searchTerms: string) => {
 return useQuery({
-  queryKey: [QUERY_KEYS.SEARCH_POSTS],
+  queryKey: [QUERY_KEYS.SEARCH_POSTS, searchTerms],
   queryFn: ()=>getSearchPosts(searchTerms),
   // refetch everytime searchTerms updates
   enabled: !!searchTerms

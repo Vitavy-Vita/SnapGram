@@ -2,20 +2,26 @@ import GridPostList from "@/components/shared/GridPostList";
 import Loader from "@/components/shared/Loader";
 import SearchResults from "@/components/shared/SearchResults";
 import { Input } from "@/components/ui/input";
+import { useInView } from "react-intersection-observer";
 import useDebounce from "@/hooks/useDebounce";
 import {
   useGetPosts,
   useSearchPosts,
 } from "@/lib/react-query/queriesAndMutations";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Explore = () => {
+  const { ref, inView } = useInView();
   const [searchValue, setSearchValue] = useState("");
   const debouncedValue = useDebounce(searchValue, 500);
-  const { data: searchPosts, isFetching: isSearchFetching } =
+  const { data: searchedPosts, isFetching: isSearchFetching } =
     useSearchPosts(debouncedValue);
   const { data: posts, fetchNextPage, hasNextPage } = useGetPosts();
 
+  useEffect(() => {
+    if (inView && !searchValue) fetchNextPage();
+  }, [inView, searchValue]);
+  
   if (!posts) {
     return (
       <div className="flex-center w-full h-full">
@@ -63,7 +69,10 @@ const Explore = () => {
       </div>
       <div className="flex flex-wrap gap-9 w-full max-w-5xl">
         {shouldShowSearchResults ? (
-          <SearchResults />
+          <SearchResults
+            isSearchFetching={isSearchFetching}
+            searchedPosts={searchedPosts}
+          />
         ) : shouldShowPosts ? (
           <p className="text-light-4 mt-10 text-center w-full">End of posts</p>
         ) : (
@@ -72,6 +81,11 @@ const Explore = () => {
           ))
         )}
       </div>
+      {hasNextPage && (
+        <div ref={ref} className="mt-10">
+          <Loader />
+        </div>
+      )}
     </div>
   );
 };

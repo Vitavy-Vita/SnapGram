@@ -203,7 +203,7 @@ export function getFilePreview(fileId: string) {
       fileId,
       2000,
       2000,
-      "top",
+      undefined,
       100
     );
 
@@ -319,7 +319,7 @@ export async function getSearchPosts(searchTerms: string) {
     const posts = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.postCollectionId,
-      [Query.search(searchTerms, "caption")]
+      [Query.search("caption", searchTerms)]
     );
     if (!posts) throw Error;
     return posts;
