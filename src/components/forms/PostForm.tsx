@@ -21,7 +21,6 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "../ui/use-toast";
 import {
   useCreatePost,
-  // useDeletePost,
   useUpdatePost,
 } from "@/lib/react-query/queriesAndMutations";
 
@@ -34,8 +33,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
     useCreatePost();
   const { mutateAsync: updatePost, isPending: isLoadingUpdate } =
     useUpdatePost();
-  // const { mutateAsync: deletePost, isPending: isLoadingDelete } =
-  //   useDeletePost();
+
 
   const { user } = useUserContext();
   const navigate = useNavigate();
