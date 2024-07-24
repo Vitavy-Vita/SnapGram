@@ -3,7 +3,7 @@ import PostStats from "@/components/shared/PostStats";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useUserContext } from "@/context/AuthContext";
-import { deletePost } from "@/lib/appwrite/api";
+
 import {
   useDeletePost,
   useGetPostById,
