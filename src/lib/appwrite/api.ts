@@ -104,7 +104,6 @@ export async function createPost(post: InterfaceNewPost) {
     // convert tags in array
     const tags = post.tags?.replace(/ /g, "").split(",") || [];
 
-    console.log(fileUrl);
     const newPost = await databases.createDocument(
       appwriteConfig.databaseId,
       appwriteConfig.postCollectionId,
