@@ -12,9 +12,11 @@ const Home = () => {
     fetchNextPage,
     hasNextPage,
   } = useGetRecentsInfinitePosts();
+
   useEffect(() => {
     if (inView) fetchNextPage();
   }, [inView]);
+  
   if (!posts) {
     return (
       <div className="flex-center w-full h-full">

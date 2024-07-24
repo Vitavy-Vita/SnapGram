@@ -234,7 +234,7 @@ export async function getInfiniteRecentPosts({
 }: {
   pageParam: number;
 }) {
-  const queries: any[] = [Query.orderDesc("$createdAt"), Query.limit(10)];
+  const queries: any[] = [Query.orderDesc("$createdAt"), Query.limit(9)];
   if (pageParam) queries.push(Query.cursorAfter(pageParam.toString()));
   try {
     const posts = await databases.listDocuments(
@@ -312,7 +312,7 @@ export async function getPostById(postId: string) {
 
 export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
   // Array of any type of elements, ordered newest posts first, limited to 10 per query
-  const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(10)];
+  const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(9)];
 
   if (pageParam) {
     // Sets the pagination for posts, if we already have 10 posts, loads 10more indefinitely
