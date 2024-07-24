@@ -24,7 +24,9 @@ export const SignInValidation = z.object({
 });
 export const PostValidation = z.object({
   caption: z.string().min(5).max(2200),
-  file: z.custom<File[]>(),
+  file: z
+    .custom<File[]>()
+    .refine((file) => file?.length == 1, "File is required."),
   location: z.string().min(2).max(200),
   tags: z.string(),
 });

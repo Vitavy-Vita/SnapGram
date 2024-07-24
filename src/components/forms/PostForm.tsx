@@ -34,7 +34,6 @@ const PostForm = ({ post, action }: PostFormProps) => {
   const { mutateAsync: updatePost, isPending: isLoadingUpdate } =
     useUpdatePost();
 
-
   const { user } = useUserContext();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -152,9 +151,8 @@ const PostForm = ({ post, action }: PostFormProps) => {
             type="submit"
             className="shad-button_primary whitespace-nowrap"
             disabled={isLoadingCreate || isLoadingUpdate}
-
           >
-            {isLoadingCreate || isLoadingUpdate && 'Loading...'}
+            {isLoadingCreate || (isLoadingUpdate && "Loading...")}
             {action} Post
           </Button>
         </div>
