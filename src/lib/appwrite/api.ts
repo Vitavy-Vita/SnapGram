@@ -229,6 +229,25 @@ export async function getRecentPosts() {
   if (!posts) throw Error;
   return posts;
 }
+export async function getInfiniteRecentPosts({
+  pageParam,
+}: {
+  pageParam: number;
+}) {
+  const queries: any[] = [Query.orderDesc("$createdAt"), Query.limit(10)];
+  if (pageParam) queries.push(Query.cursorAfter(pageParam.toString()));
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      queries
+    );
+    if (!posts) throw Error;
+    return posts;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 export async function likePost(postId: string, likesArray: string[]) {
   try {

@@ -11,6 +11,7 @@ import {
   deleteSavedPost,
   getCurrentUser,
   getInfinitePosts,
+  getInfiniteRecentPosts,
   getPostById,
   getRecentPosts,
   getSearchPosts,
@@ -174,15 +175,31 @@ export const useGetPosts = () => {
       const lastId = lastPage.documents[lastPage?.documents.length - 1].$id;
       return lastId;
     },
-    initialPageParam: null, // Set initialPageParam to null (tanstack v5) 
+    initialPageParam: null, // Set initialPageParam to null (tanstack v5)
+  });
+};
+
+export const useGetRecentsInfinitePosts = () => {
+  // hook from React Query, which provides built-in support for infinite scrolling.
+  return useInfiniteQuery({
+    queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+    queryFn: getInfiniteRecentPosts as any,
+    getNextPageParam: (lastPage: any) => {
+      // if we are on the 'lastPage' and the array [documents] is empty, this means there are no more pages to fetch, so return null
+      if (lastPage && lastPage.documents.length === 0) return null;
+      // Otherwise, get the ID of the last document in the documents array.
+      const lastId = lastPage.documents[lastPage?.documents.length - 1].$id;
+      return lastId;
+    },
+    initialPageParam: null, // Set initialPageParam to null (tanstack v5)
   });
 };
 
 export const useSearchPosts = (searchTerms: string) => {
-return useQuery({
-  queryKey: [QUERY_KEYS.SEARCH_POSTS, searchTerms],
-  queryFn: ()=>getSearchPosts(searchTerms),
-  // refetch everytime searchTerms updates
-  enabled: !!searchTerms
-})
-}
+  return useQuery({
+    queryKey: [QUERY_KEYS.SEARCH_POSTS, searchTerms],
+    queryFn: () => getSearchPosts(searchTerms),
+    // refetch everytime searchTerms updates
+    enabled: !!searchTerms,
+  });
+};
