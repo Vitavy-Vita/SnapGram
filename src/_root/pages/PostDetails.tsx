@@ -1,17 +1,48 @@
 import Loader from "@/components/shared/Loader";
 import PostStats from "@/components/shared/PostStats";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import { useUserContext } from "@/context/AuthContext";
-import { useGetPostById } from "@/lib/react-query/queriesAndMutations";
+import { deletePost } from "@/lib/appwrite/api";
+import {
+  useDeletePost,
+  useGetPostById,
+} from "@/lib/react-query/queriesAndMutations";
 import { multiFormatDateString } from "@/lib/utils";
-import { Link, useParams } from "react-router-dom";
+import { ToastAction } from "@radix-ui/react-toast";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const PostDetails = () => {
   const { id } = useParams();
+  const { toast } = useToast();
+  const navigate = useNavigate();
   const { data: post, isPending } = useGetPostById(id || "");
   const { user } = useUserContext();
+  const { mutateAsync: deletePost } = useDeletePost();
 
-  const handleDeletePost = () => {};
+  async function handleDeletePost() {
+    if (post) {
+      const postDeleted = await deletePost({
+        postId: post.$id,
+        imageId: post?.imageId,
+      });
+      if (!postDeleted) {
+        toast({ title: "please try again" });
+      }
+      return navigate("/");
+    }
+  }
+  const showToast = () => {
+    toast({
+      title: "Are you sure you want to delete this post ?",
+      description: "This action cannot be undone.",
+      action: (
+        <ToastAction altText="Confirm" onClick={handleDeletePost}>
+          Confirm
+        </ToastAction>
+      ),
+    });
+  };
   return (
     <div className="post_details-container">
       {isPending ? (
@@ -67,8 +98,7 @@ const PostDetails = () => {
                   />
                 </Link>
                 <Button
-                  onClick={handleDeletePost}
-                  variant={"ghost"}
+                  onClick={showToast}
                   className={`ghost_details-delete_btn ${
                     user.id !== post?.users.$id && "hidden"
                   }`}

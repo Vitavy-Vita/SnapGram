@@ -35,7 +35,7 @@ module.exports = {
         'light-4': '#5C5C7B',
       },
       screens: {
-        'xs': '480px',
+        'xs': '412px',
       
       },
       width: {

@@ -8,8 +8,7 @@ type PostCardProps = {
   post: Models.Document;
 };
 const PostCard = ({ post }: PostCardProps) => {
-    // const { mutateAsync: deletePost, isPending: isLoadingDelete } =
-  //   useDeletePost();
+
   const { user } = useUserContext();
   if (!post.users) return;
   return (
