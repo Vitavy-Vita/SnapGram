@@ -1,6 +1,5 @@
 import BottomBar from "@/components/shared/BottomBar";
 import LeftSideBar from "@/components/shared/LeftSideBar";
-import RightSideBar from "@/components/shared/RightSideBar";
 import TopBar from "@/components/shared/TopBar";
 import { Outlet } from "react-router-dom";
 
