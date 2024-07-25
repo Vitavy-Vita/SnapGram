@@ -3,6 +3,7 @@ import PostCard from "@/components/shared/PostCard";
 import { useGetRecentsInfinitePosts } from "@/lib/react-query/queriesAndMutations";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
+import RightSideBar from "@/components/shared/RightSideBar";
 
 const Home = () => {
   const { ref, inView } = useInView();
@@ -43,6 +44,7 @@ const Home = () => {
           </div>
         )}
       </div>
+      <RightSideBar/>
     </div>
   );
 };

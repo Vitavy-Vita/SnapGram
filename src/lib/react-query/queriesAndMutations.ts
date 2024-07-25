@@ -6,10 +6,8 @@ import {
 } from "@tanstack/react-query";
 import {
   createPost,
-  createUserAccount,
   deletePost,
   deleteSavedPost,
-  getCurrentUser,
   getInfinitePosts,
   getInfiniteRecentPosts,
   getPostById,
@@ -17,26 +15,27 @@ import {
   getSearchPosts,
   likePost,
   savePost,
-  signInAccount,
-  signOutAccount,
   updatePost,
-} from "../appwrite/api";
+} from "../appwrite/postApi";
 import {
   InterfaceNewPost,
   InterfaceNewUser,
   InterfaceUpdatePost,
 } from "@/types";
 import { QUERY_KEYS } from "./queryKeys";
+import {
+  createUserAccount,
+  signInAccount,
+  signOutAccount,
+} from "../appwrite/authApi";
+import { getAllUsers, getCurrentUser } from "../appwrite/userApi";
 
+/* -------------------------------------------------------------------------- */
+/*                                    AUTH                                    */
+/* -------------------------------------------------------------------------- */
 export const useCreateUserAccount = () => {
   return useMutation({
     mutationFn: (user: InterfaceNewUser) => createUserAccount(user),
-  });
-};
-export const useGetCurrentUser = () => {
-  return useQuery({
-    queryKey: [QUERY_KEYS.GET_CURRENT_USER],
-    queryFn: getCurrentUser,
   });
 };
 export const useSignInAccount = () => {
@@ -50,6 +49,24 @@ export const useSignOutAccount = () => {
     mutationFn: () => signOutAccount(),
   });
 };
+/* -------------------------------------------------------------------------- */
+/*                                    USER                                    */
+/* -------------------------------------------------------------------------- */
+export const useGetCurrentUser = () => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+    queryFn: getCurrentUser,
+  });
+};
+export const useGetAllUsers = () => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USERS],
+    queryFn: getAllUsers,
+  });
+};
+/* -------------------------------------------------------------------------- */
+/*                                    POST                                    */
+/* -------------------------------------------------------------------------- */
 export const useCreatePost = () => {
   const queryClient = useQueryClient();
   return useMutation({
