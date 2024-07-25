@@ -4,14 +4,14 @@ import { Button } from "../ui/button";
 
 const RightSideBar = () => {
   const { data: users } = useGetAllUsers();
-  console.log(users);
+
   return (
     <div className="rightsidebar">
       <h2 className="h3-bold md:h2-bold text-left w-full">Top Creators</h2>
       <div className="grid grid-cols-2 gap-20 md-10 my-10">
         {users &&
           users.documents.map((user, index) => (
-            <div className="flex flex-col items-center gap-2">
+            <div className="flex flex-col items-center gap-2" key={index}>
               <Link
                 to={`/profile/${user.id}`}
                 className="flex gap-3 items-center"
