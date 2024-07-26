@@ -13,7 +13,6 @@ import {
   getInfiniteSavedPosts,
   getPostById,
   getRecentPosts,
-  getSavedPosts,
   getSearchPosts,
   likePost,
   savePost,
