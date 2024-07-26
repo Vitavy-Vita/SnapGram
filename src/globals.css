@@ -230,7 +230,7 @@
 
   /* Right sidebar */
   .rightsidebar {
-    @apply hidden md:flex px-6 py-10 flex-col min-w-[500px] bg-dark-2;
+    @apply hidden lg:flex px-6 py-10 flex-col min-w-[270px] bg-dark-2;
   }
 
   .rightsidebar-link {
