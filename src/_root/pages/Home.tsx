@@ -17,7 +17,7 @@ const Home = () => {
   useEffect(() => {
     if (inView) fetchNextPage();
   }, [inView]);
-  
+
   if (!posts) {
     return (
       <div className="flex-center w-full h-full">
@@ -44,7 +44,7 @@ const Home = () => {
           </div>
         )}
       </div>
-      <RightSideBar/>
+      <RightSideBar />
     </div>
   );
 };

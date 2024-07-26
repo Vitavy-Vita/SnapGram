@@ -201,7 +201,7 @@ export const useGetPosts = () => {
 export const useGetSavedPosts = () => {
   // hook from React Query, which provides built-in support for infinite scrolling.
   return useInfiniteQuery({
-    queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
+    queryKey: [QUERY_KEYS.GET_SAVED_POSTS],
     queryFn: getInfiniteSavedPosts as any,
     getNextPageParam: (lastPage: any) => {
       // if we are on the 'lastPage' and the array [documents] is empty, this means there are no more pages to fetch, so return null

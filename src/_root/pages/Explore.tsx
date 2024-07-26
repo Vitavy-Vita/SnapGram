@@ -16,13 +16,18 @@ const Explore = () => {
   const debouncedValue = useDebounce(searchValue, 500);
   const { data: searchedPosts, isFetching: isSearchFetching } =
     useSearchPosts(debouncedValue);
-  const { data: posts, fetchNextPage, hasNextPage } = useGetPosts();
+  const {
+    data: posts,
+    fetchNextPage,
+    hasNextPage,
+    isPending: isPostLoading,
+  } = useGetPosts();
 
   useEffect(() => {
     if (inView && !searchValue) fetchNextPage();
   }, [inView, searchValue]);
 
-  if (!posts) {
+  if (!posts || posts === undefined) {
     return (
       <div className="flex-center w-full h-full">
         <Loader />
@@ -68,7 +73,9 @@ const Explore = () => {
         </div>
       </div>
       <div className="flex flex-wrap gap-9 w-full max-w-5xl">
-        {shouldShowSearchResults ? (
+        {isPostLoading && !posts ? (
+          <Loader />
+        ) : shouldShowSearchResults ? (
           <SearchResults
             isSearchFetching={isSearchFetching}
             searchedPosts={searchedPosts}

@@ -8,14 +8,19 @@ import { Models } from "appwrite";
 
 const Saved = () => {
   const { ref, inView } = useInView();
-  const { data: posts, fetchNextPage, hasNextPage } = useGetSavedPosts();
+  const {
+    data: savedPosts,
+    fetchNextPage,
+    hasNextPage,
+    isPending: isPostLoading,
+  } = useGetSavedPosts();
   const { user } = useUserContext();
 
   useEffect(() => {
     if (inView) fetchNextPage();
   }, [inView]);
 
-  if (!posts) {
+  if (!savedPosts || savedPosts === undefined) {
     return (
       <div className="flex-center w-full h-full">
         <Loader />
@@ -23,7 +28,7 @@ const Saved = () => {
     );
   }
 
-  const shouldShowPosts = posts.pages.every(
+  const shouldShowPosts = savedPosts.pages.every(
     (item) => item.documents.length === 0
   );
 
@@ -34,13 +39,15 @@ const Saved = () => {
         <h3 className="body-bold md:h3-bold ">Saved Posts</h3>
       </div>
       <div className="flex flex-wrap gap-9 w-full max-w-5xl">
-        {shouldShowPosts ? (
+        {isPostLoading && !savedPosts ? (
+          <Loader />
+        ) : shouldShowPosts ? (
           <p className="text-light-4 mt-10 text-center w-full">End of posts</p>
         ) : (
-          posts.pages.map((item, index) => (
+          savedPosts.pages.map((item, index) => (
             <GridSavedPostList
               key={`page-${index}`}
-              posts={item.documents.filter(
+              savedPosts={item.documents.filter(
                 (post: Models.Document) => post.user.$id === user.id
               )}
             />
