@@ -1,6 +1,7 @@
 import GridPostList from "@/components/shared/GridPostList";
 import GridSavedPostList from "@/components/shared/GridSavedPostsList";
 import Loader from "@/components/shared/Loader";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useUserContext } from "@/context/AuthContext";
 import {
@@ -11,7 +12,7 @@ import {
 import { Models } from "appwrite";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const Profile = () => {
   const { ref, inView } = useInView();
@@ -54,6 +55,12 @@ const Profile = () => {
           <p className="text-light-4">@{userId.username}</p>
           <p>{user.bio}</p>
         </div>
+        <Link to={`/update-profile/${id}`}>
+          <Button className="gap-1">
+            <img src="/assets/icons/edit.svg" alt="edit-icon" className="w-4" />
+            <p className="medium-bold">Edit Profile</p>
+          </Button>
+        </Link>
       </div>
       <div className="user-inner_container mt-10">
         <Tabs defaultValue="posts" className="w-full">
