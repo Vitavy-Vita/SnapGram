@@ -29,7 +29,7 @@ import {
   signInAccount,
   signOutAccount,
 } from "../appwrite/authApi";
-import { getAllUsers, getCurrentUser } from "../appwrite/userApi";
+import { getAllUsers, getCurrentUser, getUserById } from "../appwrite/userApi";
 
 /* -------------------------------------------------------------------------- */
 /*                                    AUTH                                    */
@@ -63,6 +63,13 @@ export const useGetAllUsers = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_USERS],
     queryFn: getAllUsers,
+  });
+};
+export const useGetUserById = (userId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USER_BY_ID, userId],
+    queryFn: () => getUserById(userId),
+    enabled: !!userId,
   });
 };
 /* -------------------------------------------------------------------------- */
