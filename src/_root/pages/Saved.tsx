@@ -31,6 +31,7 @@ const Saved = () => {
   const shouldShowPosts = savedPosts.pages.every(
     (item) => item.documents.length === 0
   );
+console.log(savedPosts.pages);
 
   return (
     <div className="explore-container">

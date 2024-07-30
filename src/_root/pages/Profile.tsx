@@ -5,6 +5,7 @@ import {
   useGetPosts,
   useGetUserById,
 } from "@/lib/react-query/queriesAndMutations";
+import { Models } from "appwrite";
 import { useParams } from "react-router-dom";
 
 const Profile = () => {
@@ -22,8 +23,12 @@ const Profile = () => {
   const shouldShowPosts = posts.pages.every(
     (item) => item.documents.length === 0
   );
+
+  console.log(posts.pages);
+  console.log(user.$id);
+
   return (
-    <div className="py-10 px-5 md:p-14">
+    <div className="user-container">
       <div className="max-w-5xl flex w-full gap-6 md:gap-9 ">
         <img
           src={user.imageUrl}
@@ -36,16 +41,25 @@ const Profile = () => {
           <p>{user.bio}</p>
         </div>
       </div>
-      <div className="flex flex-wrap gap-9 w-full max-w-5xl">
-        {isPostLoading && !posts ? (
-          <Loader />
-        ) : shouldShowPosts ? (
-          <p className="text-light-4 mt-10 text-center w-full">End of posts</p>
-        ) : (
-          posts.pages.map((item, index) => (
-            <GridPostList key={`page-${index}`} posts={item.documents} />
-          ))
-        )}
+      <div className="user-inner_container">
+        <div className="flex flex-wrap gap-9 w-full max-w-5xl">
+          {isPostLoading && !posts ? (
+            <Loader />
+          ) : shouldShowPosts ? (
+            <p className="text-light-4 mt-10 text-center w-full">
+              End of posts
+            </p>
+          ) : (
+            posts.pages.map((item, index) => (
+              <GridPostList
+                key={`page-${index}`}
+                posts={item.documents.filter(
+                  (post: Models.Document) => post.users.$id === user.$id
+                )}
+              />
+            ))
+          )}
+        </div>
       </div>
     </div>
   );
