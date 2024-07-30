@@ -163,6 +163,8 @@ export async function getInfiniteRecentPosts({
 }
 
 export async function likePost(postId: string, likesArray: string[]) {
+  console.log(likesArray);
+
   try {
     const updatedPost = await databases.updateDocument(
       appwriteConfig.databaseId,
@@ -178,6 +180,8 @@ export async function likePost(postId: string, likesArray: string[]) {
     console.log(error);
   }
 }
+
+
 export async function savePost(postId: string, userId: string) {
   try {
     const updatedPost = await databases.createDocument(

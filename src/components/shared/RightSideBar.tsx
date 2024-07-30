@@ -13,7 +13,7 @@ const RightSideBar = () => {
           users.documents.map((user, index) => (
             <div className="flex flex-col items-center gap-2" key={index}>
               <Link
-                to={`/profile/${user.id}`}
+                to={`/profile/${user.$id}`}
                 className="flex gap-3 items-center"
               >
                 <img
