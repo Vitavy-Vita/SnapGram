@@ -11,7 +11,6 @@ import {
   getInfinitePosts,
   getInfiniteRecentPosts,
   getInfiniteSavedPosts,
-  getLikedPosts,
   getPostById,
   getRecentPosts,
   getSearchPosts,
