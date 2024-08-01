@@ -1,5 +1,5 @@
 import { Query } from "appwrite";
-import { account, appwriteConfig, databases } from "./config";
+import { account, appwriteConfig, avatars, databases } from "./config";
 import { InterfaceUpdateUser } from "@/types";
 import { deleteFile, getFilePreview, uploadFile } from "./postApi";
 
@@ -85,6 +85,15 @@ export async function updateUser(user: InterfaceUpdateUser) {
       throw Error;
     }
     return updatedUser;
+  } catch (error) {
+    console.log(error);
+  }
+}
+export async function deleteUser(userId: string) {
+  if (!userId) throw Error;
+  try {
+    await account.deleteSession(userId);
+    return { status: "user deleted" };
   } catch (error) {
     console.log(error);
   }
