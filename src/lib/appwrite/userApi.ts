@@ -1,5 +1,5 @@
 import { Query } from "appwrite";
-import { account, appwriteConfig, avatars, databases } from "./config";
+import { account, appwriteConfig, databases } from "./config";
 import { InterfaceUpdateUser } from "@/types";
 import { deleteFile, getFilePreview, uploadFile } from "./postApi";
 
