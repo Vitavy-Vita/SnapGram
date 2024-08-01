@@ -18,6 +18,7 @@ import { useUserContext } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../ui/use-toast";
 import { useUpdateUser } from "@/lib/react-query/queriesAndMutations";
+import { InterfaceUser } from "@/types";
 
 type UserFormProps = {
   userToUpdate?: Models.Document;
@@ -26,7 +27,7 @@ type UserFormProps = {
 const UserForm = ({ userToUpdate }: UserFormProps) => {
   const { mutateAsync: updateUser, isPending: isLoadingUpdate } =
     useUpdateUser();
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -41,19 +42,29 @@ const UserForm = ({ userToUpdate }: UserFormProps) => {
   });
   async function onSubmit(values: z.infer<typeof UserValidation>) {
     if (userToUpdate) {
-      const updatedUser = await updateUser({
+      const updatedUserDoc = await updateUser({
         ...values,
         userId: userToUpdate.$id,
         imageId: userToUpdate?.imageId,
         imageUrl: userToUpdate?.imageUrl,
       });
 
-      if (!updatedUser) {
-        toast({ title: "please try again" });
+      if (updatedUserDoc) {
+        const updatedUser: InterfaceUser = {
+          id: updatedUserDoc.$id,
+          name: updatedUserDoc.name,
+          username: updatedUserDoc.username,
+          bio: updatedUserDoc.bio,
+          email: updatedUserDoc.email,
+          imageUrl: updatedUserDoc.imageUrl,
+        };
+        setUser(updatedUser);
+        navigate(`/profile/${user.id}`);
+      } else {
+        toast({ title: "Please try again" });
+        navigate("/");
       }
-      return navigate(`/profile/${user.id}`);
     }
-    navigate("/");
   }
   return (
     <Form {...form}>
