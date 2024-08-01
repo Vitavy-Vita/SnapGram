@@ -23,10 +23,17 @@ export const SignInValidation = z.object({
     .max(50),
 });
 export const PostValidation = z.object({
-  caption: z.string().min(5).max(2200),
-  file: z
-    .custom<File[]>()
-    .refine((file) => file?.length == 1, "File is required."),
+  caption: z.string().min(2).max(2200),
+  file: z.custom<File[]>(),
+  // .refine((file) => file?.length == 1, "File is required."),
   location: z.string().min(2).max(200),
   tags: z.string(),
+});
+
+export const UserValidation = z.object({
+  name: z.string().min(2).max(2200),
+  bio: z.string().min(2).max(2200),
+  username: z.string().min(2).max(2200),
+  file: z.custom<File[]>(),
+  // .refine((file) => file?.length == 1, "File is required."),
 });
