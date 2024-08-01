@@ -53,7 +53,7 @@ const Profile = () => {
         <div className="flex flex-col ">
           <h2 className="h2-bold">{userId.name}</h2>
           <p className="text-light-4">@{userId.username}</p>
-          <p>{user.bio}</p>
+          <p>{userId.bio}</p>
         </div>
         <Link to={`/update-profile/${id}`}>
           <Button className="gap-1">

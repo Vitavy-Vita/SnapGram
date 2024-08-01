@@ -11,7 +11,6 @@ import {
   getInfinitePosts,
   getInfiniteRecentPosts,
   getInfiniteSavedPosts,
-  getLikedPosts,
   getPostById,
   getRecentPosts,
   getSearchPosts,
@@ -23,6 +22,7 @@ import {
   InterfaceNewPost,
   InterfaceNewUser,
   InterfaceUpdatePost,
+  InterfaceUpdateUser,
 } from "@/types";
 import { QUERY_KEYS } from "./queryKeys";
 import {
@@ -30,7 +30,7 @@ import {
   signInAccount,
   signOutAccount,
 } from "../appwrite/authApi";
-import { getAllUsers, getCurrentUser, getUserById } from "../appwrite/userApi";
+import { getAllUsers, getCurrentUser, getUserById, updateUser } from "../appwrite/userApi";
 
 /* -------------------------------------------------------------------------- */
 /*                                    AUTH                                    */
@@ -71,6 +71,17 @@ export const useGetUserById = (userId: string) => {
     queryKey: [QUERY_KEYS.GET_USER_BY_ID, userId],
     queryFn: () => getUserById(userId),
     enabled: !!userId,
+  });
+};
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (user: InterfaceUpdateUser) => updateUser(user),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_USER_BY_ID, data?.$id],
+      });
+    },
   });
 };
 /* -------------------------------------------------------------------------- */

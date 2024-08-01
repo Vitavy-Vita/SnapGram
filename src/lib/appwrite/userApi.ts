@@ -1,5 +1,7 @@
 import { Query } from "appwrite";
 import { account, appwriteConfig, databases } from "./config";
+import { InterfaceUpdateUser } from "@/types";
+import { deleteFile, getFilePreview, uploadFile } from "./postApi";
 
 export async function getCurrentUser() {
   try {
@@ -41,6 +43,48 @@ export async function getUserById(userId: string) {
     );
     if (!user) throw Error;
     return user;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function updateUser(user: InterfaceUpdateUser) {
+  const hasFileToUpdate = user.file.length > 0;
+
+  try {
+    let image = {
+      imageUrl: user.imageUrl,
+      imageId: user.imageId,
+    };
+    if (hasFileToUpdate) {
+      //upload image to storage
+      const uploadedFile = await uploadFile(user.file[0]);
+      if (!uploadedFile) throw Error;
+      const fileUrl = getFilePreview(uploadedFile.$id);
+
+      if (!fileUrl) {
+        deleteFile(uploadedFile.$id);
+        throw Error;
+      }
+      image = { ...image, imageUrl: fileUrl, imageId: uploadedFile.$id };
+    }
+    const updatedUser = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      user.userId,
+      {
+        name: user.name,
+        bio: user.bio,
+        username: user.username,
+        imageUrl: image.imageUrl,
+        imageId: image.imageId,
+      }
+    );
+    if (!updatedUser) {
+      await deleteFile(user.imageId);
+      throw Error;
+    }
+    return updatedUser;
   } catch (error) {
     console.log(error);
   }
