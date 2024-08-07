@@ -37,6 +37,7 @@ import {
   getUserById,
   updateUser,
 } from "../appwrite/userApi";
+import { followUser, unfollowUser } from "../appwrite/followsApi";
 
 /* -------------------------------------------------------------------------- */
 /*                                    AUTH                                    */
@@ -102,6 +103,47 @@ export const useDeleteUser = () => {
     },
   });
 };
+/* -------------------------------------------------------------------------- */
+/*                                   FOLLOWS                                  */
+/* -------------------------------------------------------------------------- */
+export const useFollowUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ userId }: { userId: string }) => followUser(userId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_FOLLOWED_USERS],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_USERS],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+    },
+  });
+};
+export const useUnfollowUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ followedRecordId }: { followedRecordId: string }) =>
+      unfollowUser(followedRecordId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_FOLLOWED_USERS],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_USERS],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+    },
+  });
+};
+
 /* -------------------------------------------------------------------------- */
 /*                                    POST                                    */
 /* -------------------------------------------------------------------------- */
