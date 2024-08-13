@@ -6,7 +6,6 @@ import { deleteFile, getFilePreview, uploadFile } from "./postApi";
 export async function getCurrentUser() {
   try {
     const currentAccount = await account.get();
-    console.log(currentAccount);
     if (!currentAccount) throw Error("No account found");
 
     const currentUser = await databases.listDocuments(
@@ -14,7 +13,6 @@ export async function getCurrentUser() {
       appwriteConfig.userCollectionId,
       [Query.equal("accountId", currentAccount.$id)]
     );
-    console.log(currentUser);
     if (!currentUser) throw Error("User not found in collection");
 
     return currentUser.documents[0];
