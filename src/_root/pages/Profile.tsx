@@ -29,7 +29,7 @@ const Profile = () => {
   } = useGetPosts();
   const { data: savedPosts, isPending: isSavedLoading } = useGetSavedPosts();
   const { data: followedUsers } = useGetAllFollowedUsers();
-  
+
   useEffect(() => {
     if (inView) fetchNextPage();
   }, [inView]);
@@ -58,12 +58,18 @@ const Profile = () => {
           <p className="text-light-4">@{userId.username}</p>
           <p>{userId.bio}</p>
         </div>
-        <Link to={`/update-profile/${id}`}>
-          <Button className="gap-1">
-            <img src="/assets/icons/edit.svg" alt="edit-icon" className="w-4" />
-            <p className="medium-bold">Edit Profile</p>
-          </Button>
-        </Link>
+        {user?.id === userId.$id && (
+          <Link to={`/update-profile/${id}`}>
+            <Button className="gap-1">
+              <img
+                src="/assets/icons/edit.svg"
+                alt="edit-icon"
+                className="w-4"
+              />
+              <p className="medium-bold">Edit Profile</p>
+            </Button>
+          </Link>
+        )}
       </div>
       <div className="user-inner_container mt-10">
         <Tabs defaultValue="posts" className="w-full">
@@ -73,16 +79,19 @@ const Profile = () => {
               Posts
             </TabsTrigger>
             {user.id === userId.$id && (
-              <TabsTrigger value="savedPosts" className="medium-bold gap-1">
-                <img src="/assets/icons/saved.svg" alt="saved" />
-                Saved
-              </TabsTrigger>
-            )}
-            {user.id === userId.$id && (
-              <TabsTrigger value="followedUsers" className="medium-bold gap-1">
-                <img src="/assets/icons/people.svg" alt="people" />
-                Followed Users
-              </TabsTrigger>
+              <>
+                <TabsTrigger value="savedPosts" className="medium-bold gap-1">
+                  <img src="/assets/icons/saved.svg" alt="saved" />
+                  Saved
+                </TabsTrigger>
+                <TabsTrigger
+                  value="followedUsers"
+                  className="medium-bold gap-1"
+                >
+                  <img src="/assets/icons/people.svg" alt="people" />
+                  Followed Users
+                </TabsTrigger>
+              </>
             )}
           </TabsList>
           <TabsContent value="posts">
