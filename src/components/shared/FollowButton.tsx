@@ -1,4 +1,3 @@
-import { useUserContext } from "@/context/AuthContext";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import {
@@ -10,18 +9,17 @@ import { Models } from "appwrite";
 import Loader from "./Loader";
 
 type PropsButton = {
-  followedUser: Models.Document;
+  followedUser?: Models.Document;
 };
 const FollowButton = ({ followedUser }: PropsButton) => {
-  const { user } = useUserContext();
   const { data: currentUser } = useGetCurrentUser();
   const [isFollowed, setIsFollowed] = useState(false);
 
-  const { mutate: followUser } = useFollowUser();
+  const { mutate: followUser, isPending: isFollowing } = useFollowUser();
   const { mutate: unfollowUser, isPending: isUnfollowing } = useUnfollowUser();
 
   const followedUserRecord = currentUser?.follows.find(
-    (record: Models.Document) => record.followed.$id === followedUser.$id
+    (record: Models.Document) => record.followed.$id === followedUser?.$id
   );
   useEffect(() => {
     if (currentUser) {
@@ -31,7 +29,7 @@ const FollowButton = ({ followedUser }: PropsButton) => {
 
   const handleFollow = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log(followedUserRecord);
+    console.log(currentUser);
 
     if (followedUserRecord) {
       setIsFollowed(false);
@@ -39,12 +37,15 @@ const FollowButton = ({ followedUser }: PropsButton) => {
       return;
     }
 
-    followUser({ followId: followedUser.$id, userId: user.id });
+    followUser({
+      followId: followedUser?.$id || "",
+      userId: currentUser?.$id || "",
+    });
     setIsFollowed(true);
   };
   return (
     <>
-      {isUnfollowing ? (
+      {isUnfollowing && isFollowing ? (
         <Button className="shad-button_primary">
           <Loader />
         </Button>

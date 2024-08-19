@@ -117,9 +117,6 @@ export const useFollowUser = () => {
         queryKey: [QUERY_KEYS.GET_FOLLOWED_USERS],
       });
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_USERS],
-      });
-      queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
     },
@@ -129,14 +126,10 @@ export const useUnfollowUser = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ followedRecordId }: { followedRecordId: string }) =>
-      unfollowUser(followedRecordId),
+    mutationFn: (followedRecordId: string) => unfollowUser(followedRecordId),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_FOLLOWED_USERS],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_USERS],
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],

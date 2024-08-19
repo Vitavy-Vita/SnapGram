@@ -3,8 +3,6 @@ import { appwriteConfig, databases } from "./config";
 
 export async function followUser(followId: string, userId: string) {
   try {
-    console.log("Follow ID:", followId);
-    console.log("User ID:", userId);
     const userFollowed = await databases.createDocument(
       appwriteConfig.databaseId,
       appwriteConfig.followsCollectionId,
