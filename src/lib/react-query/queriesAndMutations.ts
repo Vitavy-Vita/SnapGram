@@ -37,7 +37,11 @@ import {
   getUserById,
   updateUser,
 } from "../appwrite/userApi";
-import { followUser, unfollowUser } from "../appwrite/followsApi";
+import {
+  followUser,
+  getAllFollowedUsers,
+  unfollowUser,
+} from "../appwrite/followsApi";
 
 /* -------------------------------------------------------------------------- */
 /*                                    AUTH                                    */
@@ -138,6 +142,18 @@ export const useUnfollowUser = () => {
   });
 };
 
+export const useGetAllFollowedUsers = () => {
+  return useInfiniteQuery({
+    queryKey: [QUERY_KEYS.GET_ALL_FOLLOWED_USERS],
+    queryFn: getAllFollowedUsers as any,
+    getNextPageParam: (lastPage: any) => {
+      if (lastPage && lastPage.documents.length === 0) return null;
+      const lastId = lastPage.documents[lastPage?.documents.length - 1].$id;
+      return lastId;
+    },
+    initialPageParam: null,
+  });
+};
 /* -------------------------------------------------------------------------- */
 /*                                    POST                                    */
 /* -------------------------------------------------------------------------- */

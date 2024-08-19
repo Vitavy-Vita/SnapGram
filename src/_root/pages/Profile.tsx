@@ -1,3 +1,4 @@
+import GridFollowedUserList from "@/components/shared/GridFollowedUserList";
 import GridPostList from "@/components/shared/GridPostList";
 import GridSavedPostList from "@/components/shared/GridSavedPostsList";
 import Loader from "@/components/shared/Loader";
@@ -5,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useUserContext } from "@/context/AuthContext";
 import {
+  useGetAllFollowedUsers,
   useGetPosts,
   useGetSavedPosts,
   useGetUserById,
@@ -26,7 +28,8 @@ const Profile = () => {
     fetchNextPage,
   } = useGetPosts();
   const { data: savedPosts, isPending: isSavedLoading } = useGetSavedPosts();
-
+  const { data: followedUsers } = useGetAllFollowedUsers();
+  
   useEffect(() => {
     if (inView) fetchNextPage();
   }, [inView]);
@@ -75,6 +78,12 @@ const Profile = () => {
                 Saved
               </TabsTrigger>
             )}
+            {user.id === userId.$id && (
+              <TabsTrigger value="followedUsers" className="medium-bold gap-1">
+                <img src="/assets/icons/people.svg" alt="people" />
+                Followed Users
+              </TabsTrigger>
+            )}
           </TabsList>
           <TabsContent value="posts">
             <div className="flex flex-wrap gap-9 w-full max-w-5xl">
@@ -110,6 +119,27 @@ const Profile = () => {
                     key={`page-${index}`}
                     savedPosts={item.documents.filter(
                       (post: Models.Document) => post.user.$id === userId.$id
+                    )}
+                  />
+                ))
+              )}
+            </div>
+          </TabsContent>
+          <TabsContent value="followedUsers">
+            <div className="flex flex-wrap gap-9 w-full max-w-5xl">
+              {!followedUsers ? (
+                <Loader />
+              ) : shouldShowPosts ? (
+                <p className="text-light-4 mt-10 text-center w-full">
+                  End of posts
+                </p>
+              ) : (
+                followedUsers.pages.map((item, index) => (
+                  <GridFollowedUserList
+                    key={`page-${index}`}
+                    followedUsers={item.documents.filter(
+                      (isFollowed: Models.Document) =>
+                        isFollowed.follower.$id === userId.$id
                     )}
                   />
                 ))

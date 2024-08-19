@@ -1,4 +1,4 @@
-import { ID } from "appwrite";
+import { ID, Query } from "appwrite";
 import { appwriteConfig, databases } from "./config";
 
 export async function followUser(followId: string, userId: string) {
@@ -28,6 +28,28 @@ export async function unfollowUser(followedRecordId: string) {
     );
     if (!statusCode) throw Error;
     return { status: "ok" };
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getAllFollowedUsers({
+  pageParam,
+}: {
+  pageParam: number;
+}) {
+  const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(9)];
+  if (pageParam) {
+    queries.push(Query.cursorAfter(pageParam.toString()));
+  }
+  try {
+    const allUser = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.followsCollectionId,
+      queries
+    );
+    if (!allUser) throw Error;
+    return allUser;
   } catch (error) {
     console.log(error);
   }
