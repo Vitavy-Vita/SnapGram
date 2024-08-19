@@ -29,8 +29,6 @@ const FollowButton = ({ followedUser }: PropsButton) => {
 
   const handleFollow = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log(currentUser);
-
     if (followedUserRecord) {
       setIsFollowed(false);
       unfollowUser(followedUserRecord.$id);
@@ -51,7 +49,9 @@ const FollowButton = ({ followedUser }: PropsButton) => {
         </Button>
       ) : (
         <Button
-          className="shad-button_primary"
+          className={
+            isFollowed ? "shad-button_secondary" : "shad-button_primary"
+          }
           onClick={(e) => handleFollow(e)}
         >
           {isFollowed ? "Unfollow" : "Follow"}

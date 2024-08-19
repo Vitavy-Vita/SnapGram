@@ -20,7 +20,6 @@ export async function followUser(followId: string, userId: string) {
 }
 
 export async function unfollowUser(followedRecordId: string) {
-  console.log(followedRecordId);
   try {
     const statusCode = await databases.deleteDocument(
       appwriteConfig.databaseId,
