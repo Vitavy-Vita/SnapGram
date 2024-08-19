@@ -8,7 +8,12 @@ const AllUsers = () => {
     <div className="user-container">
       <div className="user-inner_container">
         <h2 className="h3-bold md:h2-bold w-full flex gap-2">
-          <img src="/assets/icons/people.svg" alt="people" />
+        <img
+            src="/assets/icons/people.svg"
+            alt="all-users"
+            width={36}
+            height={36}
+          />
           All Users
         </h2>
         <div className="user-grid">
