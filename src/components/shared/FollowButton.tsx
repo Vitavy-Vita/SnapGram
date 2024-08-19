@@ -44,7 +44,7 @@ const FollowButton = ({ followedUser }: PropsButton) => {
   return (
     <>
       {isUnfollowing || isFollowing ? (
-        <Button className="shad-button_primary">
+        <Button className="shad-button_ghost">
           <Loader />
         </Button>
       ) : (
