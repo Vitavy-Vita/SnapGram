@@ -96,17 +96,6 @@ export const useUpdateUser = () => {
   });
 };
 
-export const useDeleteUser = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ userId }: { userId: string }) => deleteUser(userId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
-      });
-    },
-  });
-};
 /* -------------------------------------------------------------------------- */
 /*                                   FOLLOWS                                  */
 /* -------------------------------------------------------------------------- */

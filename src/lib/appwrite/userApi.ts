@@ -89,12 +89,3 @@ export async function updateUser(user: InterfaceUpdateUser) {
     console.log(error);
   }
 }
-export async function deleteUser(userId: string) {
-  if (!userId) throw Error;
-  try {
-    await account.deleteSession(userId);
-    return { status: "user deleted" };
-  } catch (error) {
-    console.log(error);
-  }
-}

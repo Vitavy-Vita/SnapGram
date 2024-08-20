@@ -17,12 +17,8 @@ import { Models } from "appwrite";
 import { useUserContext } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../ui/use-toast";
-import {
-  // useDeleteUser,
-  useUpdateUser,
-} from "@/lib/react-query/queriesAndMutations";
+import { useUpdateUser } from "@/lib/react-query/queriesAndMutations";
 import { InterfaceUser } from "@/types";
-// import { ToastAction } from "@radix-ui/react-toast";
 
 type UserFormProps = {
   userToUpdate?: Models.Document;
@@ -31,9 +27,8 @@ type UserFormProps = {
 const UserForm = ({ userToUpdate }: UserFormProps) => {
   const { mutateAsync: updateUser, isPending: isLoadingUpdate } =
     useUpdateUser();
-  // const { mutateAsync: deleteUser } = useDeleteUser();
-  // , setIsAuthenticated 
-  const { user, setUser} = useUserContext();
+
+  const { user, setUser } = useUserContext();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -66,39 +61,12 @@ const UserForm = ({ userToUpdate }: UserFormProps) => {
         };
         setUser(updatedUser);
         navigate(`/profile/${user.id}`);
-      } else {
-        toast({ title: "Please try again" });
-        navigate("/");
       }
+      toast({ title: "Please try again" });
+      navigate("/");
     }
   }
-  /* -------------------------------------------------------------------------- */
-  /*                              WORK IN PROGRESS                              */
-  /* -------------------------------------------------------------------------- */
-  // async function handleDeleteAccount() {
-  //   if (userToUpdate) {
-  //     const userDeleted = await deleteUser({
-  //       userId: userToUpdate.$id,
-  //     });
-  //     if (userDeleted) {
-  //       setIsAuthenticated(false);
-  //       navigate("/sign-in");
-  //     } else {
-  //       toast({ title: "please try again" });
-  //     }
-  //   }
-  // }
-  // const showToast = () => {
-  //   toast({
-  //     title: "Are you sure you want to delete your account ?",
-  //     description: "This action cannot be undone.",
-  //     action: (
-  //       <ToastAction altText="Confirm" onClick={handleDeleteAccount}>
-  //         Confirm
-  //       </ToastAction>
-  //     ),
-  //   });
-  // };
+
   return (
     <Form {...form}>
       <form
