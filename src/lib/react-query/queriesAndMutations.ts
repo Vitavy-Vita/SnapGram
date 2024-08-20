@@ -31,7 +31,6 @@ import {
   signOutAccount,
 } from "../appwrite/authApi";
 import {
-  deleteUser,
   getAllUsers,
   getCurrentUser,
   getUserById,

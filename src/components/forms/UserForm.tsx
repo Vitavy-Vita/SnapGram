@@ -61,8 +61,9 @@ const UserForm = ({ userToUpdate }: UserFormProps) => {
         };
         setUser(updatedUser);
         navigate(`/profile/${user.id}`);
+      } else {
+        toast({ title: "Please try again" });
       }
-      toast({ title: "Please try again" });
       navigate("/");
     }
   }
