@@ -30,10 +30,25 @@ export async function createPost(post: InterfaceNewPost) {
         tags: tags,
       }
     );
+    const userDocument = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      post.userId
+    );
+
+    await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      post.userId,
+      {
+        postCount: (userDocument.postCount || 0) + 1,
+      }
+    );
     if (!newPost) {
       await deleteFile(uploadedFile.$id);
       throw Error;
     }
+
     return newPost;
   } catch (error) {
     console.log(error);
@@ -83,7 +98,11 @@ export async function updatePost(post: InterfaceUpdatePost) {
   }
 }
 
-export async function deletePost(postId: string, imageId: string) {
+export async function deletePost(
+  postId: string,
+  imageId: string,
+  userId: string
+) {
   if (!postId || !imageId) throw Error;
   try {
     await databases.deleteDocument(
@@ -91,6 +110,21 @@ export async function deletePost(postId: string, imageId: string) {
       appwriteConfig.postCollectionId,
       postId
     );
+    const userDocument = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      userId
+    );
+
+    await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      userId,
+      {
+        postCount: Math.max((userDocument.postCount || 0) - 1, 0),
+      }
+    );
+
     return { status: "post deleted" };
   } catch (error) {
     console.log(error);

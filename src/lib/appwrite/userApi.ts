@@ -25,7 +25,7 @@ export async function getAllUsers() {
     const allUser = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.userCollectionId,
-      [Query.orderDesc("name"), Query.limit(10)]
+      [Query.orderDesc("postCount"), Query.limit(10)]
     );
     if (!allUser) throw Error;
     return allUser;

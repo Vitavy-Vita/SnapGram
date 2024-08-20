@@ -25,6 +25,7 @@ const PostDetails = () => {
       const postDeleted = await deletePost({
         postId: post.$id,
         imageId: post?.imageId,
+        userId: user.id
       });
       if (!postDeleted) {
         toast({ title: "please try again" });
